@@ -11,7 +11,6 @@ const App: React.FC = () => {
         (state: KevbanState) => state.issues,
         shallowEqual
     )
-    const dispatch: Dispatch<any> = useDispatch()
 
     const displayIssues = issues.map(
         (issue: IIssue) => (

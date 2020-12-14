@@ -15,20 +15,26 @@ type Props = {
 export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
     const dispatch: Dispatch<any> = useDispatch()
     const [expanded, setExpanded] = React.useState(false)
-
     const users: readonly IUser[] = useSelector(
         (state: KevbanState) => state.users,
         shallowEqual
     )
+    const assignUserDispatch = React.useCallback(
+        (issue: IIssue, user: null | IUser) => dispatch(assignUser(issue, user)),
+        [dispatch, assignUser]
+    )
+
+    const menuItem = (user: IUser | null) => {
+        return <Menu.Item
+            text={user === null ? <i>Unassign</i> : user.name}
+            onClick={() => assignUserDispatch(issue, user)}
+        />
+    }
 
     const userMenuItems = [
-        <Menu.Item text={<i>Unassign</i>} onClick={() => assignUser(issue, null)}/>
+        menuItem(null)
     ].concat(
-        users.map(
-            (user: IUser) => (
-                <Menu.Item text={user.name} onClick={() => assignUser(issue, user)}/>
-            )
-        )
+        users.map((user: IUser) => (menuItem(user)))
     )
 
     const assigneeArea = (

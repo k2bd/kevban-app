@@ -22,13 +22,17 @@ export function simulateHttpRequest(
     request_action: KevbanAction,
     response_ok_action: KevbanAction,
 ) {
+    console.log("a")
     return (dispatch: DispatchType) => {
+        console.log("b")
         dispatch(request_action)
-
+        
         // Simulate HTTP request delay
+        console.log("c")
         setTimeout(
             () => {dispatch(response_ok_action)},
             1000
         )
+        console.log("d")
     }
 }

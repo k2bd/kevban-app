@@ -55,7 +55,7 @@ const assign_user_ok = (action: KevbanAction, state: KevbanState) => {
                 return {
                     ...issue,
                     userLoading: false,
-                    assignee_name: action.user ? null : action.user!.name,
+                    assignee_name: action.user === null ? null : action.user.name,
                 }
             } else {
                 return issue
