@@ -7,7 +7,22 @@ const initialState: KevbanState = {
         {
             title: "Create kevban board",
             body: "Create more than a single issue sitting in space",
-            assignee_name: null,
+            assigneeName: null,
+            laneName: "To do",
+            userLoading: false,
+        },
+        {
+            title: "Make a billion dollars",
+            body: "Get money",
+            assigneeName: null,
+            laneName: "To do",
+            userLoading: false,
+        },
+        {
+            title: "Learn the basics of React",
+            body: "Go through the basics of React, Redux, and TypeScript",
+            assigneeName: "Kevin",
+            laneName: "In progress",
             userLoading: false,
         },
     ],
@@ -19,12 +34,23 @@ const initialState: KevbanState = {
             name: "Gonzo",
         },
     ],
+    lanes: [
+        {
+            name: "To do",
+        },
+        {
+            name: "In progress",
+        },
+        {
+            name: "Done",
+        },
+    ],
 }
 
 
 const assign_user_requested = (action: KevbanAction, state: KevbanState) => {
-    if (action.issue === null) {
-        throw "Null value encountered in ASSIGN_USER_REQUESTED"
+    if (action.issue === undefined) {
+        throw "Undefined issue encountered in ASSIGN_USER_REQUESTED"
     }
     const newIssues = state.issues.map(
         (issue: IIssue) => {
@@ -32,6 +58,7 @@ const assign_user_requested = (action: KevbanAction, state: KevbanState) => {
                 return {
                     ...issue,
                     userLoading: true,
+                    assigneeName: action.user === undefined ? null : action.user.name,
                 }
             } else {
                 return issue
@@ -46,8 +73,8 @@ const assign_user_requested = (action: KevbanAction, state: KevbanState) => {
 
 
 const assign_user_ok = (action: KevbanAction, state: KevbanState) => {
-    if (action.issue === null) {
-        throw "Null value encountered in ASSIGN_USER_REQUESTED"
+    if (action.issue === undefined) {
+        throw "Undefined issue encountered in ASSIGN_USER_REQUESTED"
     }
     const newIssues = state.issues.map(
         (issue: IIssue) => {
@@ -55,7 +82,6 @@ const assign_user_ok = (action: KevbanAction, state: KevbanState) => {
                 return {
                     ...issue,
                     userLoading: false,
-                    assignee_name: action.user === null ? null : action.user.name,
                 }
             } else {
                 return issue

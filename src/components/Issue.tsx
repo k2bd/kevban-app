@@ -2,13 +2,13 @@ import * as React from "react"
 import { Dispatch } from "redux"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 
-import { Button, Card, Collapse, Menu, Popover } from "@blueprintjs/core";
+import { Button, Card, Collapse, Icon, Menu, Popover } from "@blueprintjs/core";
 
 
 type Props = {
     issue: IIssue,
     deleteIssue: (issue: IIssue) => void,
-    assignUser: (issue: IIssue, user: null | IUser) => void,
+    assignUser: (issue: IIssue, user?: IUser) => void,
 }
 
 
@@ -20,26 +20,28 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
         shallowEqual
     )
     const assignUserDispatch = React.useCallback(
-        (issue: IIssue, user: null | IUser) => dispatch(assignUser(issue, user)),
+        (issue: IIssue, user?: IUser) => dispatch(assignUser(issue, user)),
         [dispatch, assignUser]
     )
 
-    const menuItem = (user: IUser | null) => {
+    const menuItem = (user?: IUser) => {
         return <Menu.Item
-            text={user === null ? <i>Unassign</i> : user.name}
+            text={user === undefined ? <i>Unassign</i> : user.name}
             onClick={() => assignUserDispatch(issue, user)}
         />
     }
 
     const userMenuItems = [
-        menuItem(null)
+        menuItem()
     ].concat(
         users.map((user: IUser) => (menuItem(user)))
     )
 
     const assigneeArea = (
         <Popover>
-            <p>👤: {issue.assignee_name ? issue.assignee_name : <i>Unassigned</i>}</p>
+            <Button icon={issue.userLoading ? <Icon icon="cloud-upload"/> : "user"} rightIcon="caret-down">
+                {issue.assigneeName === null ? <i>Unassigned</i> : issue.assigneeName}
+            </Button>
             <Menu>
                 {userMenuItems}
             </Menu>
@@ -48,7 +50,7 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
 
     return <div>
         <Card interactive={false}>
-            <Button onClick={() => setExpanded(!expanded)}>
+            <Button minimal={true} onClick={() => setExpanded(!expanded)}>
                 <h4>{issue.title}</h4>
             </Button>
             <Collapse isOpen={expanded}>

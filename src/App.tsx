@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, shallowEqual, useDispatch } from "react-redux"
 import { Dispatch } from "redux"
 import { Issue } from "./components/Issue"
+import { IssueBoard } from './components/IssueBoard';
 
 import { simulateAssignUser } from "./store/actionCreators"
 
@@ -12,20 +13,12 @@ const App: React.FC = () => {
         shallowEqual
     )
 
-    const displayIssues = issues.map(
-        (issue: IIssue) => (
-            <Issue
-                key={issue.title}
-                issue={issue}
-                deleteIssue={(i: IIssue) => null} // TODO, get action creator
-                assignUser={simulateAssignUser}
-            />
-        )
-    )
-
     return (
         <div className="App">
-            {displayIssues}
+            <IssueBoard
+                deleteIssue={(issue: IIssue) => null} // TODO
+                assignUser={simulateAssignUser}
+            />
         </div>
     );
 }

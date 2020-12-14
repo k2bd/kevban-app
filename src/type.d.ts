@@ -3,7 +3,8 @@
 interface IIssue {
     title: string,
     body: string,
-    assignee_name: null | string,
+    assigneeName: null | string,
+    laneName: string,
     userLoading: boolean,
 }
 
@@ -13,18 +14,25 @@ interface IUser {
 }
 
 
+interface ILane {
+    name: string,
+}
+
+
 // ----- STATE -----
 
 type KevbanState = {
     issues: IIssue[],
     users: IUser[],
+    lanes: ILane[],
 }
 
 
 type KevbanAction = {
     type: string,
-    issue: null | IIssue,
-    user: null | IUser,
+    issue?: IIssue,
+    user?: IUser,
+    lane?: ILane,
 }
 
 type DispatchType = (args: KevbanAction) => KevbanAction
