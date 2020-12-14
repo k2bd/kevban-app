@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useSelector, shallowEqual, useDispatch } from "react-redux"
+import { Dispatch } from "redux"
+import { Issue } from "./components/Issue"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { simulateAssignUser } from "./store/actionCreators"
+
+
+const App: React.FC = () => {
+    const issues: readonly IIssue[] = useSelector(
+        (state: KevbanState) => state.issues,
+        shallowEqual
+    )
+    const dispatch: Dispatch<any> = useDispatch()
+
+    const displayIssues = issues.map(
+        (issue: IIssue) => (
+            <Issue
+                key={issue.title}
+                issue={issue}
+                deleteIssue={(i: IIssue) => null} // TODO, get action creator
+                assignUser={simulateAssignUser}
+            />
+        )
+    )
+
+    return (
+        <div className="App">
+            {displayIssues}
+        </div>
+    );
 }
 
 export default App;
