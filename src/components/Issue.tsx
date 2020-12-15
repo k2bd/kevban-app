@@ -2,7 +2,7 @@ import * as React from "react"
 import { Dispatch } from "redux"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 
-import { Button, Card, Collapse, Icon, Menu, Popover } from "@blueprintjs/core";
+import { Button, Card, Classes, Collapse, Icon, Menu, Popover } from "@blueprintjs/core";
 
 
 type Props = {
@@ -38,18 +38,20 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
     )
 
     const assigneeArea = (
-        <Popover>
-            <Button
-                icon={issue.userLoading ? "cloud-upload" : "user"}
-                rightIcon="caret-down"
-                disabled={issue.userLoading}
-            >
-                {issue.assigneeName === null ? <i>Unassigned</i> : issue.assigneeName}
-            </Button>
-            <Menu>
-                {userMenuItems}
-            </Menu>
-        </Popover>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <Popover>
+                <Button
+                    icon={issue.userLoading ? "cloud-upload" : "user"}
+                    rightIcon="caret-down"
+                    disabled={issue.userLoading}
+                >
+                    {issue.assigneeName === null ? <i>Unassigned</i> : issue.assigneeName}
+                </Button>
+                <Menu>
+                    {userMenuItems}
+                </Menu>
+            </Popover>
+        </div>
     )
 
     return <div>
