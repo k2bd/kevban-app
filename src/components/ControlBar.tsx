@@ -76,7 +76,12 @@ export const ControlBar: React.FC<Props> = ({createIssue}) => {
                     onChange={(value: string) => setNewBody(value)}
                     multiline={true}
                 />
-                <Button icon="confirm" onClick={() => createNewIssue(newTitle, newBody)}/>
+                <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                    <Button
+                        icon="confirm"
+                        onClick={() => createNewIssue(newTitle, newBody)}
+                    />
+                </div>
             </div>
         </Overlay>
     </Navbar>

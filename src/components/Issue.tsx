@@ -39,7 +39,11 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
 
     const assigneeArea = (
         <Popover>
-            <Button icon={issue.userLoading ? <Icon icon="cloud-upload"/> : "user"} rightIcon="caret-down">
+            <Button
+                icon={issue.userLoading ? "cloud-upload" : "user"}
+                rightIcon="caret-down"
+                disabled={issue.userLoading}
+            >
                 {issue.assigneeName === null ? <i>Unassigned</i> : issue.assigneeName}
             </Button>
             <Menu>
@@ -57,7 +61,6 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
                 <p>{issue.body}</p>
             </Collapse>
             {assigneeArea}
-            <p>{issue.userLoading}</p>
         </Card>
     </div>
 }
