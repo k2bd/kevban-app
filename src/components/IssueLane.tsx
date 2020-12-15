@@ -6,14 +6,22 @@ import { Issue } from "./Issue"
 
 type Props = {
     lane: ILane,
-    issues: IIssue[],
     deleteIssue: (issue: IIssue) => void,
     assignUser: (issue: IIssue, user: IUser | null) => void,
 }
 
 
-export const IssueLane: React.FC<Props> = ({lane, issues, deleteIssue, assignUser}) => {
-    const displayIssues = issues.map(
+export const IssueLane: React.FC<Props> = ({lane, deleteIssue, assignUser}) => {
+    const allIssues: readonly IIssue[] = useSelector(
+        (state: KevbanState) => state.issues,
+        shallowEqual
+    )
+
+    const laneIssues = allIssues.filter(
+        (issue: IIssue) => issue.laneName === lane.name
+    )
+
+    const displayIssues = laneIssues.map(
         (issue: IIssue) => (
             <Issue
                 key={issue.title}

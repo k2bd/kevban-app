@@ -7,7 +7,9 @@ import thunk from "redux-thunk"
 import App from "./App"
 import reducer from "./store/reducer"
 
+import "normalize.css"
 import "@blueprintjs/core/lib/css/blueprint.css"
+import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
 
 const store: Store<KevbanState, KevbanAction> & {

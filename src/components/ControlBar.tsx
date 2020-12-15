@@ -32,6 +32,8 @@ export const ControlBar: React.FC<Props> = ({createIssue}) => {
         [dispatch, createIssue]
     )
 
+    const toggleOverlay = () => setOverlayActive(!overlayActive)
+
     const createNewIssue = (title: string, body: string) => {
         const newIssue = {
             ...blankIssue(),
@@ -39,12 +41,11 @@ export const ControlBar: React.FC<Props> = ({createIssue}) => {
             body: body,
         }
         createIssueDispatch(newIssue)
+        toggleOverlay()
         setNewTitle("")
         setNewBody("")
     }
-
-    const toggleOverlay = () => setOverlayActive(!overlayActive)
-
+    
     return (
         <div>
             <Navbar>
@@ -58,35 +59,37 @@ export const ControlBar: React.FC<Props> = ({createIssue}) => {
                     />
                 </NavbarGroup>
             </Navbar>
-            <Overlay
-                isOpen={overlayActive}
-                className={Classes.OVERLAY_SCROLL_CONTAINER}
-                onClose={toggleOverlay}
-            >
-                <div className={classNames(Classes.CARD, Classes.ELEVATION_4)}>
-                    <H1>
+            <div>
+                <Overlay
+                    isOpen={overlayActive}
+                    className={Classes.OVERLAY_SCROLL_CONTAINER}
+                    onClose={toggleOverlay}
+                >
+                    <div className={classNames(Classes.CARD, Classes.ELEVATION_4)}>
+                        <H1>
+                            <EditableText
+                                placeholder="Title..."
+                                intent={Intent.PRIMARY}
+                                selectAllOnFocus={true}
+                                onChange={(value: string) => setNewTitle(value)}
+                            />
+                        </H1>
                         <EditableText
-                            placeholder="Title..."
+                            placeholder="Description..."
                             intent={Intent.PRIMARY}
                             selectAllOnFocus={true}
-                            onChange={(value: string) => setNewTitle(value)}
+                            onChange={(value: string) => setNewBody(value)}
+                            multiline={true}
                         />
-                    </H1>
-                    <EditableText
-                        placeholder="Description..."
-                        intent={Intent.PRIMARY}
-                        selectAllOnFocus={true}
-                        onChange={(value: string) => setNewBody(value)}
-                        multiline={true}
-                    />
-                    <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                        <Button
-                            icon="confirm"
-                            onClick={() => createNewIssue(newTitle, newBody)}
-                        />
+                        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                            <Button
+                                icon="confirm"
+                                onClick={() => createNewIssue(newTitle, newBody)}
+                            />
+                        </div>
                     </div>
-                </div>
-            </Overlay>
+                </Overlay>
+            </div>
         </div>
     )
 }

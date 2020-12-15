@@ -15,31 +15,19 @@ type Props = {
 
 
 export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser}) => {
-    const issues: readonly IIssue[] = useSelector(
-        (state: KevbanState) => state.issues,
-        shallowEqual
-    )
     const lanes: readonly ILane[] = useSelector(
         (state: KevbanState) => state.lanes,
         shallowEqual
     )
 
-    const renderLane = (lane: ILane) => {
-        const issuesForLane = issues.filter(
-            (issue: IIssue) => issue.laneName === lane.name
-        )
-        return <IssueLane
-            lane={lane}
-            issues={issuesForLane}
-            deleteIssue={deleteIssue}
-            assignUser={assignUser}
-        />
-    }
-
     const renderedLanes = lanes.map(
         (lane: ILane) => (
             <div>
-                {renderLane(lane)}
+                <IssueLane
+                    lane={lane}
+                    deleteIssue={deleteIssue}
+                    assignUser={assignUser}
+                />
             </div>
         )
     )
