@@ -36,7 +36,6 @@ export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser}) => {
         />
     }
 
-    // TODO what if there are no lanes
     const renderedLanes = lanes.map(
         (lane: ILane) => (
             <div>
