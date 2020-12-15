@@ -31,7 +31,7 @@ type KevbanState = {
 type KevbanAction = {
     type: string,
     issue?: IIssue,
-    user?: IUser,
+    user?: IUser | null,
     lane?: ILane,
 }
 

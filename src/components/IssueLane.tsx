@@ -8,7 +8,7 @@ type Props = {
     lane: ILane,
     issues: IIssue[],
     deleteIssue: (issue: IIssue) => void,
-    assignUser: (issue: IIssue, user?: IUser) => void,
+    assignUser: (issue: IIssue, user: IUser | null) => void,
 }
 
 

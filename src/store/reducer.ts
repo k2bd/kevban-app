@@ -49,8 +49,8 @@ const initialState: KevbanState = {
 
 
 const assign_user_requested = (action: KevbanAction, state: KevbanState) => {
-    if (action.issue === undefined) {
-        throw "Undefined issue encountered in ASSIGN_USER_REQUESTED"
+    if ((action.issue === undefined) || action.user === undefined) {
+        throw "Undefined value encountered in ASSIGN_USER_REQUESTED"
     }
     const newIssues = state.issues.map(
         (issue: IIssue) => {
@@ -58,7 +58,7 @@ const assign_user_requested = (action: KevbanAction, state: KevbanState) => {
                 return {
                     ...issue,
                     userLoading: true,
-                    assigneeName: action.user === undefined ? null : action.user.name,
+                    assigneeName: action.user === null ? null : action.user!.name,
                 }
             } else {
                 return issue
@@ -73,8 +73,8 @@ const assign_user_requested = (action: KevbanAction, state: KevbanState) => {
 
 
 const assign_user_ok = (action: KevbanAction, state: KevbanState) => {
-    if (action.issue === undefined) {
-        throw "Undefined issue encountered in ASSIGN_USER_REQUESTED"
+    if ((action.issue === undefined) || action.user === undefined) {
+        throw "Undefined value encountered in ASSIGN_USER_REQUESTED"
     }
     const newIssues = state.issues.map(
         (issue: IIssue) => {
@@ -95,6 +95,22 @@ const assign_user_ok = (action: KevbanAction, state: KevbanState) => {
 }
 
 
+const create_issue_requested = (action: KevbanAction, state: KevbanState) => {
+    if (action.issue === undefined) {
+        throw "Undefined issue encountered in CREATE_ISSUE_REQUESTED"
+    }
+    return {
+        ...state,
+        issues: state.issues.concat([action.issue]),
+    }
+}
+
+
+const create_issue_ok = (action: KevbanAction, state: KevbanState) => {
+    return state
+}
+
+
 const reducer = (
     state: KevbanState = initialState,
     action: KevbanAction,
@@ -104,6 +120,10 @@ const reducer = (
             return assign_user_requested(action, state)
         case actionTypes.ASSIGN_USER_OK:
             return assign_user_ok(action, state)
+        case actionTypes.CREATE_ISSUE_REQUESTED:
+            return create_issue_requested(action, state)
+        case actionTypes.CREATE_ISSUE_OK:
+            return create_issue_ok(action, state)
     }
     return state
 }

@@ -8,7 +8,7 @@ import { Button, Card, Collapse, Icon, Menu, Popover } from "@blueprintjs/core";
 type Props = {
     issue: IIssue,
     deleteIssue: (issue: IIssue) => void,
-    assignUser: (issue: IIssue, user?: IUser) => void,
+    assignUser: (issue: IIssue, user: IUser | null) => void,
 }
 
 
@@ -20,19 +20,19 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
         shallowEqual
     )
     const assignUserDispatch = React.useCallback(
-        (issue: IIssue, user?: IUser) => dispatch(assignUser(issue, user)),
+        (issue: IIssue, user: IUser | null) => dispatch(assignUser(issue, user)),
         [dispatch, assignUser]
     )
 
-    const menuItem = (user?: IUser) => {
+    const menuItem = (user: null | IUser) => {
         return <Menu.Item
-            text={user === undefined ? <i>Unassign</i> : user.name}
+            text={user === null ? <i>Unassign</i> : user.name}
             onClick={() => assignUserDispatch(issue, user)}
         />
     }
 
     const userMenuItems = [
-        menuItem()
+        menuItem(null)
     ].concat(
         users.map((user: IUser) => (menuItem(user)))
     )

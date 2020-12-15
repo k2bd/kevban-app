@@ -10,7 +10,7 @@ import { IssueLane } from "./IssueLane"
 
 type Props = {
     deleteIssue: (issue: IIssue) => void,
-    assignUser: (issue: IIssue, user?: IUser) => void,
+    assignUser: (issue: IIssue, user: IUser | null) => void,
 }
 
 
