@@ -13,6 +13,7 @@ const blankIssue = (): IIssue => (
         assigneeName: null,
         laneName: "To do",
         userLoading: false,
+        issueLoading: false,
     }
 )
 

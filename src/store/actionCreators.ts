@@ -33,6 +33,23 @@ export function simulateCreateIssue(issue: IIssue) {
 }
 
 
+export function simulateMoveIssue(issue: IIssue, lane: ILane) {
+    const request_action: KevbanAction = {
+        type: actionTypes.MOVE_ISSUE_REQUESTED,
+        issue: issue,
+        lane: lane,
+    }
+
+    const response_ok_action: KevbanAction = {
+        type: actionTypes.MOVE_ISSUE_OK,
+        issue: issue,
+        lane: lane,
+    }
+
+    return simulateHttpRequest(request_action, response_ok_action)
+}
+
+
 export function simulateHttpRequest(
     request_action: KevbanAction,
     response_ok_action: KevbanAction,

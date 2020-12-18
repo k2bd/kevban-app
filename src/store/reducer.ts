@@ -10,6 +10,7 @@ const initialState: KevbanState = {
             assigneeName: null,
             laneName: "To do",
             userLoading: false,
+            issueLoading: false,
         },
         {
             title: "Make a billion dollars",
@@ -17,6 +18,7 @@ const initialState: KevbanState = {
             assigneeName: null,
             laneName: "To do",
             userLoading: false,
+            issueLoading: false,
         },
         {
             title: "Learn the basics of React",
@@ -24,6 +26,7 @@ const initialState: KevbanState = {
             assigneeName: "Kevin",
             laneName: "In progress",
             userLoading: false,
+            issueLoading: false,
         },
     ],
     users: [
@@ -111,6 +114,53 @@ const create_issue_ok = (action: KevbanAction, state: KevbanState) => {
 }
 
 
+const move_issue_requested = (action: KevbanAction, state: KevbanState) => {
+    if ((action.issue === undefined) || action.lane === undefined) {
+        throw "Undefined value encountered in ASSIGN_USER_REQUESTED"
+    }
+    const newIssues = state.issues.map(
+        (issue: IIssue) => {
+            if (issue.title === action.issue!.title) {
+                return {
+                    ...issue,
+                    issueLoading: true,
+                    laneName: action.lane!.name,
+                }
+            } else {
+                return issue
+            }
+        }
+    )
+    return {
+        ...state,
+        issues: newIssues,
+    }
+}
+
+
+const move_issue_ok = (action: KevbanAction, state: KevbanState) => {
+    if ((action.issue === undefined) || action.lane === undefined) {
+        throw "Undefined value encountered in ASSIGN_USER_REQUESTED"
+    }
+    const newIssues = state.issues.map(
+        (issue: IIssue) => {
+            if (issue.title === action.issue!.title) {
+                return {
+                    ...issue,
+                    issueLoading: false,
+                }
+            } else {
+                return issue
+            }
+        }
+    )
+    return {
+        ...state,
+        issues: newIssues,
+    }
+}
+
+
 const reducer = (
     state: KevbanState = initialState,
     action: KevbanAction,
@@ -124,6 +174,10 @@ const reducer = (
             return create_issue_requested(action, state)
         case actionTypes.CREATE_ISSUE_OK:
             return create_issue_ok(action, state)
+        case actionTypes.MOVE_ISSUE_REQUESTED:
+            return move_issue_requested(action, state)
+        case actionTypes.MOVE_ISSUE_OK:
+            return move_issue_ok(action, state)
     }
     return state
 }

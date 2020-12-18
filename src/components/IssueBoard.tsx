@@ -7,14 +7,14 @@ import { Divider } from "@blueprintjs/core";
 import { IssueLane } from "./IssueLane"
 
 
-
 type Props = {
     deleteIssue: (issue: IIssue) => void,
     assignUser: (issue: IIssue, user: IUser | null) => void,
+    moveIssue: (issue: IIssue, lane: ILane) => void,
 }
 
 
-export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser}) => {
+export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser, moveIssue}) => {
     const lanes: readonly ILane[] = useSelector(
         (state: KevbanState) => state.lanes,
         shallowEqual
@@ -27,12 +27,15 @@ export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser}) => {
                     lane={lane}
                     deleteIssue={deleteIssue}
                     assignUser={assignUser}
+                    moveIssue={moveIssue}
                 />
             </div>
         )
     )
 
     return (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}>{renderedLanes}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}>
+            {renderedLanes}
+        </div>
     )
 }

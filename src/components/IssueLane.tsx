@@ -8,10 +8,11 @@ type Props = {
     lane: ILane,
     deleteIssue: (issue: IIssue) => void,
     assignUser: (issue: IIssue, user: IUser | null) => void,
+    moveIssue: (issue: IIssue, lane: ILane) => void,
 }
 
 
-export const IssueLane: React.FC<Props> = ({lane, deleteIssue, assignUser}) => {
+export const IssueLane: React.FC<Props> = ({lane, deleteIssue, assignUser, moveIssue}) => {
     const allIssues: readonly IIssue[] = useSelector(
         (state: KevbanState) => state.issues,
         shallowEqual
@@ -28,6 +29,7 @@ export const IssueLane: React.FC<Props> = ({lane, deleteIssue, assignUser}) => {
                 issue={issue}
                 deleteIssue={deleteIssue}
                 assignUser={assignUser}
+                moveIssue={moveIssue}
             />
         )
     )

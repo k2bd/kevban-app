@@ -6,6 +6,7 @@ interface IIssue {
     assigneeName: null | string,
     laneName: string,
     userLoading: boolean,
+    issueLoading: boolean,
 }
 
 

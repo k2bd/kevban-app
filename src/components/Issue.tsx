@@ -9,10 +9,11 @@ type Props = {
     issue: IIssue,
     deleteIssue: (issue: IIssue) => void,
     assignUser: (issue: IIssue, user: IUser | null) => void,
+    moveIssue: (issue: IIssue, lane: ILane) => void,
 }
 
 
-export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
+export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser, moveIssue}) => {
     const dispatch: Dispatch<any> = useDispatch()
     const [expanded, setExpanded] = React.useState(false)
     const users: readonly IUser[] = useSelector(
@@ -23,13 +24,21 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
         (issue: IIssue, user: IUser | null) => dispatch(assignUser(issue, user)),
         [dispatch, assignUser]
     )
+    const lanes: readonly ILane[] = useSelector(
+        (state: KevbanState) => state.lanes,
+        shallowEqual
+    )
+    const moveIssueDispatch = React.useCallback(
+        (issue: IIssue, lane: ILane) => dispatch(moveIssue(issue, lane)),
+        [dispatch, moveIssue]
+    )
 
-    const menuItem = (user: null | IUser) => {
-        return <Menu.Item
+    const menuItem = (user: null | IUser) => (
+        <Menu.Item
             text={user === null ? <i>Unassign</i> : user.name}
             onClick={() => assignUserDispatch(issue, user)}
         />
-    }
+    )
 
     const userMenuItems = [
         menuItem(null)
@@ -38,31 +47,55 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser}) => {
     )
 
     const assigneeArea = (
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Popover>
-                <Button
-                    icon={issue.userLoading ? "cloud-upload" : "user"}
-                    rightIcon="caret-down"
-                    disabled={issue.userLoading}
-                >
-                    {issue.assigneeName === null ? <i>Unassigned</i> : issue.assigneeName}
-                </Button>
-                <Menu>
-                    {userMenuItems}
-                </Menu>
-            </Popover>
-        </div>
+        <Popover>
+            <Button
+                icon={issue.userLoading ? "cloud-upload" : "user"}
+                rightIcon="caret-down"
+                disabled={issue.userLoading}
+            >
+                {issue.assigneeName === null ? <i>Unassigned</i> : issue.assigneeName}
+            </Button>
+            <Menu>
+                {userMenuItems}
+            </Menu>
+        </Popover>
+    )
+
+    const moveItem = (lane: ILane) => (
+        <Menu.Item
+            text={lane.name}
+            onClick={() => moveIssueDispatch(issue, lane)}
+        />
+    )
+
+    const laneArea = (
+        <Popover>
+            <Button
+                text="Move"
+                rightIcon="caret-down"
+                disabled={issue.issueLoading}
+            />
+            <Menu>
+                {lanes.map((lane: ILane) => moveItem(lane))}
+            </Menu>
+        </Popover>
     )
 
     return <div>
-        <Card interactive={false}>
+        <Card
+            interactive={false}
+            className={issue.issueLoading ? Classes.SKELETON : Classes.CARD}
+        >
             <Button minimal={true} onClick={() => setExpanded(!expanded)}>
                 <h4>{issue.title}</h4>
             </Button>
             <Collapse isOpen={expanded}>
                 <p>{issue.body}</p>
             </Collapse>
-            {assigneeArea}
+            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                {assigneeArea}
+                {laneArea}
+            </div>
         </Card>
     </div>
 }
