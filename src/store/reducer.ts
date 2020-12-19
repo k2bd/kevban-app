@@ -42,6 +42,9 @@ const initialState: KevbanState = {
             name: "To do",
         },
         {
+            name: "Blocked",
+        },
+        {
             name: "In progress",
         },
         {
@@ -77,7 +80,7 @@ const assign_user_requested = (action: KevbanAction, state: KevbanState) => {
 
 const assign_user_ok = (action: KevbanAction, state: KevbanState) => {
     if ((action.issue === undefined) || action.user === undefined) {
-        throw "Undefined value encountered in ASSIGN_USER_REQUESTED"
+        throw "Undefined value encountered in ASSIGN_USER_OK"
     }
     const newIssues = state.issues.map(
         (issue: IIssue) => {
@@ -116,7 +119,7 @@ const create_issue_ok = (action: KevbanAction, state: KevbanState) => {
 
 const move_issue_requested = (action: KevbanAction, state: KevbanState) => {
     if ((action.issue === undefined) || action.lane === undefined) {
-        throw "Undefined value encountered in ASSIGN_USER_REQUESTED"
+        throw "Undefined value encountered in MOVE_ISSUE_REQUESTED"
     }
     const newIssues = state.issues.map(
         (issue: IIssue) => {
@@ -140,7 +143,7 @@ const move_issue_requested = (action: KevbanAction, state: KevbanState) => {
 
 const move_issue_ok = (action: KevbanAction, state: KevbanState) => {
     if ((action.issue === undefined) || action.lane === undefined) {
-        throw "Undefined value encountered in ASSIGN_USER_REQUESTED"
+        throw "Undefined value encountered in MOVE_ISSUE_OK"
     }
     const newIssues = state.issues.map(
         (issue: IIssue) => {
@@ -161,6 +164,25 @@ const move_issue_ok = (action: KevbanAction, state: KevbanState) => {
 }
 
 
+const delete_issue_requested = (action: KevbanAction, state: KevbanState) => {
+    if (action.issue === undefined) {
+        throw "Undefined value encountered in DELETE_ISSUE_REQUESTED"
+    }
+    const newIssues = state.issues.filter(
+        (issue: IIssue) => (issue.title != action.issue!.title)
+    )
+    return {
+        ...state,
+        issues: newIssues,
+    }
+}
+
+
+const delete_issue_ok = (action: KevbanAction, state: KevbanState) => {
+    return state
+}
+
+
 const reducer = (
     state: KevbanState = initialState,
     action: KevbanAction,
@@ -178,6 +200,10 @@ const reducer = (
             return move_issue_requested(action, state)
         case actionTypes.MOVE_ISSUE_OK:
             return move_issue_ok(action, state)
+        case actionTypes.DELETE_ISSUE_REQUESTED:
+            return delete_issue_requested(action, state)
+        case actionTypes.DELETE_ISSUE_OK:
+            return delete_issue_ok(action, state)
     }
     return state
 }

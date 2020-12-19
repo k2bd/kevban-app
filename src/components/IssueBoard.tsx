@@ -34,7 +34,7 @@ export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser, moveIssue}
     )
 
     return (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gridGap: 20 }}>
             {renderedLanes}
         </div>
     )

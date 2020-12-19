@@ -2,7 +2,7 @@ import * as React from "react"
 import { Dispatch } from "redux"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 
-import { Button, Card, Classes, Collapse, Icon, Menu, Popover } from "@blueprintjs/core";
+import { Alert, Button, Card, Classes, Collapse, Icon, Menu, Popover } from "@blueprintjs/core";
 
 
 type Props = {
@@ -16,21 +16,26 @@ type Props = {
 export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser, moveIssue}) => {
     const dispatch: Dispatch<any> = useDispatch()
     const [expanded, setExpanded] = React.useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
     const users: readonly IUser[] = useSelector(
         (state: KevbanState) => state.users,
+        shallowEqual
+    )
+    const lanes: readonly ILane[] = useSelector(
+        (state: KevbanState) => state.lanes,
         shallowEqual
     )
     const assignUserDispatch = React.useCallback(
         (issue: IIssue, user: IUser | null) => dispatch(assignUser(issue, user)),
         [dispatch, assignUser]
     )
-    const lanes: readonly ILane[] = useSelector(
-        (state: KevbanState) => state.lanes,
-        shallowEqual
-    )
     const moveIssueDispatch = React.useCallback(
         (issue: IIssue, lane: ILane) => dispatch(moveIssue(issue, lane)),
         [dispatch, moveIssue]
+    )
+    const deleteIssueDispatch = React.useCallback(
+        (issue: IIssue) => dispatch(deleteIssue(issue)),
+        [dispatch, deleteIssue]
     )
 
     const menuItem = (user: null | IUser) => (
@@ -72,6 +77,7 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser, moveIssu
         <Popover>
             <Button
                 text="Move"
+                icon={issue.issueLoading ? "cloud-upload" : "arrow-right"}
                 rightIcon="caret-down"
                 disabled={issue.issueLoading}
             />
@@ -81,10 +87,37 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser, moveIssu
         </Popover>
     )
 
+    const deleteOk = () => {
+        deleteIssueDispatch(issue)
+        setDeleteDialogOpen(false)
+    }
+
+    const deleteCancel = () => {
+        setDeleteDialogOpen(false)
+    }
+
+    const deleteArea = (
+        <div>
+            <Button
+                icon="trash"
+                onClick={() => setDeleteDialogOpen(true)}
+            />
+            <Alert
+                icon="trash"
+                cancelButtonText="Cancel"
+                confirmButtonText="Delete Issue"
+                onCancel={deleteCancel}
+                onConfirm={deleteOk}
+                isOpen={deleteDialogOpen}
+            >
+                <p>Delete issue '{issue.title}'?</p>
+            </Alert>
+        </div>
+    )
+
     return <div>
         <Card
             interactive={false}
-            className={issue.issueLoading ? Classes.SKELETON : Classes.CARD}
         >
             <Button minimal={true} onClick={() => setExpanded(!expanded)}>
                 <h4>{issue.title}</h4>
@@ -95,6 +128,7 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser, moveIssu
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
                 {assigneeArea}
                 {laneArea}
+                {deleteArea}
             </div>
         </Card>
     </div>
