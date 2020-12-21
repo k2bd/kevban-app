@@ -1,7 +1,15 @@
 import * as actionTypes from "./actionTypes"
 
 
-export function simulateAssignUser(issue: IIssue, user: IUser | null) {
+export const simulatedService: IService = {
+    createIssue: simulateCreateIssue,
+    assignUser: simulateAssignUser,
+    moveIssue: simulateMoveIssue,
+    deleteIssue: simulateDeleteIssue,
+}
+
+
+function simulateAssignUser(issue: IIssue, user: IUser | null) {
     const request_action: KevbanAction = {
         type: actionTypes.ASSIGN_USER_REQUESTED,
         issue: issue,
@@ -18,7 +26,7 @@ export function simulateAssignUser(issue: IIssue, user: IUser | null) {
 }
 
 
-export function simulateCreateIssue(issue: IIssue) {
+function simulateCreateIssue(issue: IIssue) {
     const request_action: KevbanAction = {
         type: actionTypes.CREATE_ISSUE_REQUESTED,
         issue: issue,
@@ -33,7 +41,7 @@ export function simulateCreateIssue(issue: IIssue) {
 }
 
 
-export function simulateMoveIssue(issue: IIssue, lane: ILane) {
+function simulateMoveIssue(issue: IIssue, lane: ILane) {
     const request_action: KevbanAction = {
         type: actionTypes.MOVE_ISSUE_REQUESTED,
         issue: issue,
@@ -50,7 +58,7 @@ export function simulateMoveIssue(issue: IIssue, lane: ILane) {
 }
 
 
-export function simulateDeleteIssue(issue: IIssue) {
+function simulateDeleteIssue(issue: IIssue) {
     const request_action: KevbanAction = {
         type: actionTypes.DELETE_ISSUE_REQUESTED,
         issue: issue,
@@ -65,7 +73,7 @@ export function simulateDeleteIssue(issue: IIssue) {
 }
 
 
-export function simulateHttpRequest(
+function simulateHttpRequest(
     request_action: KevbanAction,
     response_ok_action: KevbanAction,
 ) {

@@ -19,18 +19,18 @@ const blankIssue = (): IIssue => (
 
 
 type Props = {
-    createIssue: (issue: IIssue) => void,
+    service: IService,
 }
 
 
-export const ControlBar: React.FC<Props> = ({createIssue}) => {
+export const ControlBar: React.FC<Props> = ({service}) => {
     const dispatch: Dispatch<any> = useDispatch()
     const [overlayActive, setOverlayActive] = React.useState(false)
     const [newTitle, setNewTitle] = React.useState("")
     const [newBody, setNewBody] = React.useState("")
     const createIssueDispatch = React.useCallback(
-        (issue: IIssue) => dispatch(createIssue(issue)),
-        [dispatch, createIssue]
+        (issue: IIssue) => dispatch(service.createIssue(issue)),
+        [dispatch, service.createIssue]
     )
 
     const toggleOverlay = () => setOverlayActive(!overlayActive)

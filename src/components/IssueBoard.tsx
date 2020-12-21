@@ -8,13 +8,11 @@ import { IssueLane } from "./IssueLane"
 
 
 type Props = {
-    deleteIssue: (issue: IIssue) => void,
-    assignUser: (issue: IIssue, user: IUser | null) => void,
-    moveIssue: (issue: IIssue, lane: ILane) => void,
+    service: IService,
 }
 
 
-export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser, moveIssue}) => {
+export const IssueBoard: React.FC<Props> = ({service}) => {
     const lanes: readonly ILane[] = useSelector(
         (state: KevbanState) => state.lanes,
         shallowEqual
@@ -25,9 +23,7 @@ export const IssueBoard: React.FC<Props> = ({deleteIssue, assignUser, moveIssue}
             <div>
                 <IssueLane
                     lane={lane}
-                    deleteIssue={deleteIssue}
-                    assignUser={assignUser}
-                    moveIssue={moveIssue}
+                    service={service}
                 />
             </div>
         )

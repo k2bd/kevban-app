@@ -5,12 +5,7 @@ import { ControlBar } from './components/ControlBar';
 import { Issue } from "./components/Issue"
 import { IssueBoard } from './components/IssueBoard';
 
-import {
-    simulateAssignUser,
-    simulateCreateIssue,
-    simulateMoveIssue,
-    simulateDeleteIssue,
-} from "./store/actionCreators"
+import { simulatedService } from "./store/actionCreators"
 
 
 const App: React.FC = () => {
@@ -21,12 +16,8 @@ const App: React.FC = () => {
 
     return (
         <div className="App">
-            <ControlBar createIssue={simulateCreateIssue}/>
-            <IssueBoard
-                deleteIssue={simulateDeleteIssue}
-                assignUser={simulateAssignUser}
-                moveIssue={simulateMoveIssue}
-            />
+            <ControlBar service={simulatedService} />
+            <IssueBoard service={simulatedService} />
         </div>
     );
 }

@@ -20,6 +20,14 @@ interface ILane {
 }
 
 
+interface IService {
+    createIssue: (issue: IIssue) => (dispatch: DispatchType) => void,
+    assignUser: (issue: IIssue, user: IUser | null) => (dispatch: DispatchType) => void,
+    moveIssue: (issue: IIssue, lane: ILane) => (dispatch: DispatchType) => void,
+    deleteIssue: (issue: IIssue) => (dispatch: DispatchType) => void,
+}
+
+
 // ----- STATE -----
 
 type KevbanState = {

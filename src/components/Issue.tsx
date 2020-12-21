@@ -7,13 +7,11 @@ import { Alert, Button, Card, Classes, Collapse, Icon, Menu, Popover } from "@bl
 
 type Props = {
     issue: IIssue,
-    deleteIssue: (issue: IIssue) => void,
-    assignUser: (issue: IIssue, user: IUser | null) => void,
-    moveIssue: (issue: IIssue, lane: ILane) => void,
+    service: IService,
 }
 
 
-export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser, moveIssue}) => {
+export const Issue: React.FC<Props> = ({issue, service}) => {
     const dispatch: Dispatch<any> = useDispatch()
     const [expanded, setExpanded] = React.useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
@@ -26,16 +24,16 @@ export const Issue: React.FC<Props> = ({issue, deleteIssue, assignUser, moveIssu
         shallowEqual
     )
     const assignUserDispatch = React.useCallback(
-        (issue: IIssue, user: IUser | null) => dispatch(assignUser(issue, user)),
-        [dispatch, assignUser]
+        (issue: IIssue, user: IUser | null) => dispatch(service.assignUser(issue, user)),
+        [dispatch, service.assignUser]
     )
     const moveIssueDispatch = React.useCallback(
-        (issue: IIssue, lane: ILane) => dispatch(moveIssue(issue, lane)),
-        [dispatch, moveIssue]
+        (issue: IIssue, lane: ILane) => dispatch(service.moveIssue(issue, lane)),
+        [dispatch, service.moveIssue]
     )
     const deleteIssueDispatch = React.useCallback(
-        (issue: IIssue) => dispatch(deleteIssue(issue)),
-        [dispatch, deleteIssue]
+        (issue: IIssue) => dispatch(service.deleteIssue(issue)),
+        [dispatch, service.deleteIssue]
     )
 
     const menuItem = (user: null | IUser) => (
